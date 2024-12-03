@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Book</title>
+</head>
+<body>
+<h1>Add Book</h1>
+<form th:action="@{/books}" th:object="${book}" method="post">
+	<input type="text" th:field="*{user.id}" th:value="1" /> <!-- Set the user ID here -->
+    <label>Title: <input type="text" th:field="*{title}" required></label><br>
+    <label>Author: <input type="text" th:field="*{author}" required></label><br>
+    <label>Publication Date: <input type="date" th:field="*{publicationDate}" required></label><br>
+    <label>PDF URL: <input type="text" th:field="*{pdfUrl}"></label><br>
+    <label>Favorite: <input type="checkbox" th:field="*{favorite}"></label><br>
+    <label>Book Type:</label>
+    <select th:field="*{bookType.id}" required>
+        <option th:each="type : ${bookTypes}" th:value="${type.id}" th:text="${type.name}"></option>
+    </select><br>
+    <input type="hidden" th:field="*{user.id}" th:value="1" /> <!-- Set the user ID here -->
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>

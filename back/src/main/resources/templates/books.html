@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+</head>
+<body>
+    <h1>All Books</h1>
+	
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publication Date</th>
+				<th>Favorite</th>
+                <th>Actions</th>
+				<th>consult</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.id}"></td>
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.author}"></td>
+                <td th:text="${book.publicationDate}"></td>
+				<td th:text="${book.favorite} ? 'Yes' : 'No'"></td>
+                <td>
+                    <a th:href="@{/books/{id}/edit(id=${book.id})}">Edit</a>
+                    <a th:href="@{/books/{id}/delete(id=${book.id})}" onclick="return confirm('Are you sure you want to delete this book?')">Delete</a>
+                </td>
+				<td>
+				    <a th:href="@{/books/{id}/view(id=${book.id})}" target="_blank">Read it</a>
+				</td>
+
+
+            </tr>
+        </tbody>
+    </table>
+	<a href="/books/new">Add New Book</a>
+	<a href="search.html">Search Books</a>
+
+</body>
+</html>

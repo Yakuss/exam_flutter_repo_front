@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Books</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Search Books</h1>
+	
+	<form id="searchForm" action="/books/search" method="get">
+	    <input type="text" id="keyword" name="keyword" placeholder="Enter keyword">
+	    <button type="submit" id="searchBtn">Search</button>
+	</form>
+
+    <div id="searchResults"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#searchForm').on('submit', function(e) {
+                e.preventDefault();
+                searchBooks();
+            });
+
+            function searchBooks() {
+                var keyword = $('#keyword').val();
+                $.ajax({
+                    url: '/books/search',
+                    type: 'GET',
+                    data: { keyword: keyword },
+                    success: function(data) {
+                        displaySearchResults(data);
+                    }
+                });
+            }
+
+			function displaySearchResults(books) {
+			    var resultsDiv = $('#searchResults');
+			    resultsDiv.empty();
+			    if (books.length === 0) {
+			        resultsDiv.append('<p>No results found</p>');
+			    } else {
+			        var table = $('<table border="1"></table>');
+			        var thead = $('<thead></thead>');
+			        var tbody = $('<tbody></tbody>');
+			        var headerRow = $('<tr></tr>');
+			        headerRow.append('<th>ID</th>');
+			        headerRow.append('<th>Title</th>');
+			        headerRow.append('<th>Author</th>');
+			        headerRow.append('<th>Publication Date</th>');
+			        headerRow.append('<th>Favorite</th>');
+			        headerRow.append('<th>Actions</th>');
+			        headerRow.append('<th>Consult</th>');
+			        thead.append(headerRow);
+			        table.append(thead);
+			
+			        books.forEach(function(book) {
+			            var row = $('<tr></tr>');
+			            row.append('<td>' + book.id + '</td>');
+			            row.append('<td>' + book.title + '</td>');
+			            row.append('<td>' + book.author + '</td>');
+			            row.append('<td>' + book.publicationDate + '</td>');
+			            row.append('<td>' + (book.favorite ? 'Yes' : 'No') + '</td>');
+			            var actions = $('<td></td>');
+			            actions.append('<a href="/books/' + book.id + '/edit">Edit</a> ');
+			            actions.append('<a href="/books/' + book.id + '/delete" onclick="return confirm(\'Are you sure you want to delete this book?\')">Delete</a>');
+			            row.append(actions);
+			            row.append('<td><a href="/books/' + book.id + '/view" target="_blank">Read it</a></td>');
+			            tbody.append(row);
+			        });
+			
+			        table.append(tbody);
+			        resultsDiv.append(table);
+			    }
+			}
+
+        });
+    </script>
+</body>
+</html>
